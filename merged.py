@@ -42,10 +42,7 @@ try:
     # Initialize SMBus (I2C)
     bus = smbus.SMBus(1)
     address = 0x36
-
-    #Initiatve vars
-    success = False
-
+    
     # GPIO setup for AC power monitoring
     PLD_PIN = 6
     chip = gpiod.Chip('gpiochip4')
@@ -106,7 +103,5 @@ try:
 finally:
     if os.path.isfile(pidfile):
         os.unlink(pidfile)
-    if success:
-        exit(0)
-    else:
-        exit(1)
+    exit(0)
+
