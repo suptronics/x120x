@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-#
-# Improved UPS power monitoring by madbear with bits from Suptronics/Geekworm
+# This script is improved by @p1r473, Thanks for his contribution and support
+# Improved UPS power monitoring by madbear with bits from SupTronics Technologies
 # originals: https://github.com/suptronics/x120x.git
 # only suitable for use with a Raspberry Pi 5 running Raspberry Pi OS with desktop
 # and the below UPS HATs:
-# https://wiki.geekworm.com/X1200
-# https://wiki.geekworm.com/X1201
-# https://wiki.geekworm.com/X1202
-#
+# http://suptronics.com/Raspberrypi/Power_mgmt/x1200-v1.2.html
+# http://suptronics.com/Raspberrypi/Power_mgmt/x1201-v1.1.html
+# http://suptronics.com/Raspberrypi/Power_mgmt/x1202-v1.1.html
+# http://suptronics.com/Raspberrypi/Power_mgmt/x1203-v1.0.html
 
 import sys
 import struct
