@@ -42,7 +42,7 @@ def get_battery_status(voltage):
 
 # Ensure only one instance of the script is running
 pid = str(os.getpid())
-pidfile = "/run/X1200.pid"
+pidfile = "/var/run/X1200.pid" # move to /var/run because of conventions
 if os.path.isfile(pidfile):
     print("Script already running")
     exit(1)
