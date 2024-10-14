@@ -6,7 +6,7 @@ import time
 from subprocess import call
 
 PLD_PIN = 6
-chip = gpiod.Chip('gpiochip4')
+chip = gpiod.Chip('gpiochip0') # since kernel release 6.6.45 you have to use 'gpiochip0' - before it was 'gpiochip4'
 pld_line = chip.get_line(PLD_PIN)
 pld_line.request(consumer="PLD", type=gpiod.LINE_REQ_DIR_IN)
 try:
