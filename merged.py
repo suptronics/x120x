@@ -15,15 +15,15 @@ SLEEP_TIME = 60  # Time in seconds to wait between failure checks
 Loop =  False
 
 def readVoltage(bus):
-    read = bus.read_word_data(address, 2)
-    swapped = struct.unpack("<H", struct.pack(">H", read))[0]
-    voltage = swapped * 1.25 / 1000 / 16
+    read = bus.read_word_data(address, 2) # reads word data (16 bit)
+    swapped = struct.unpack("<H", struct.pack(">H", read))[0] # big endian to little endian
+    voltage = swapped * 1.25 / 1000 / 16 # convert to understandable voltage
     return voltage
 
 def readCapacity(bus):
-    read = bus.read_word_data(address, 4)
-    swapped = struct.unpack("<H", struct.pack(">H", read))[0]
-    capacity = swapped / 256
+    read = bus.read_word_data(address, 4) # reads word data (16 bit)
+    swapped = struct.unpack("<H", struct.pack(">H", read))[0] # big endian to little endian
+    capacity = swapped / 256 # convert to 1-100% scale
     return capacity
 
 def get_battery_status(voltage):
@@ -42,7 +42,7 @@ def get_battery_status(voltage):
 
 # Ensure only one instance of the script is running
 pid = str(os.getpid())
-pidfile = "/run/X1200.pid"
+pidfile = "/var/run/X1200.pid" # move to /var/run because of conventions
 if os.path.isfile(pidfile):
     print("Script already running")
     exit(1)
@@ -54,7 +54,7 @@ try:
     bus = smbus.SMBus(1)
     address = 0x36
     PLD_PIN = 6
-    chip = gpiod.Chip('gpiochip4')
+    chip = gpiod.Chip('gpiochip0') # since kernel release 6.6.45 you have to use 'gpiochip0' - before it was 'gpiochip4'
     pld_line = chip.get_line(PLD_PIN)
     pld_line.request(consumer="PLD", type=gpiod.LINE_REQ_DIR_IN)
 
