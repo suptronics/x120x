@@ -117,63 +117,11 @@ class UPSStatusWindow(QWidget):
         self.setLayout(layout)
         # Populate initial data
         self.update_status()
+        self.update_status()
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update_status)
         self.timer.start(30000)  ## milliseconds
         self.shutdown = False
-
-    # def populate_initial_data(self):
-    #     voltage, capacity = read_voltage_and_capacity(bus)
-    #     cpu_volts = read_cpu_volts()
-    #     cpu_amps = read_cpu_amps()
-    #     cpu_temp = read_cpu_temp()
-    #     input_voltage = read_input_voltage()
-    #     fan_rpm = get_fan_rpm()
-    #     pwr_use = power_consumption_watts()
-    #     pld_state = get_pld_state()
-    #     warn_status = ""
-
-    #     if capacity >= 90: # up = disabled
-    #         charge_status = "<FONT COLOR='#FF0000'>disabled</FONT>"
-    #         InputDevice(CHG_ONOFF_PIN,pull_up=True)
-    #     else: # down = enabled
-    #         charge_status = "<FONT COLOR='#FF0000'>enabled</FONT>"
-    #         InputDevice(CHG_ONOFF_PIN,pull_up=False)
-
-    #     if pld_state == 1:
-    #         power_status = "<FONT COLOR='#00FF00'>\U00002714 AC Power: OK! \U00002714<BR/>\U00002714 Power Adapter: OK! \U00002714</FONT>"
-    #     else:
-    #         power_status = "<FONT COLOR='#FF0000'>\U000026A0 Power Loss OR Power Adapter Failure \U000026A0</FONT>"
-
-    #     if pld_state != 1 and capacity >=51:
-    #         warn_status = f"<FONT COLOR='#FF0000';FONT-SIZE: 14pt;>Running on UPS Backup Power<BR/>Batteries @{capacity:.2f}&#37;"
-    #     elif pld_state != 1 and capacity <= 50 and capacity >= 25:
-    #         warn_status = f"<FONT COLOR='#FF0000';FONT-SIZE: 14pt;>UPS Power levels approaching critical,<BR/>Batteries @{capacity:.2f}&#37;</FONT><BR/>"
-    #     elif pld_state != 1 and capacity <= 24 and capacity >= 16:
-    #         warn_status = f"<FONT COLOR='#FF0000';FONT-SIZE: 16pt;>UPS Power levels critical,<BR/>Batteries @{capacity:.2f}&#37;</FONT><BR/>"
-    #     elif pld_state != 1 and capacity <= 15:
-    #         warn_status = "<FONT COLOR='#FF0000';FONT-SIZE: 18pt;>UPS Power failure imminent!<BR/>Auto shutdown to occur in 5 minutes!</FONT><BR/>"
-    #         call("sudo shutdown -P +5 &quot;Power failure, shutdown in 5 minutes.&quot;", shell=True)
-    #     else:
-    #         warn_status = ""
-
-    #     text = (
-    #         f"<FONT COLOR='#9C009C'>-=-=-=-=-=</FONT><FONT COLOR='#FF00FF'> X120x Stats </FONT><FONT COLOR='#9C009C'>=-=-=-=-=-</FONT><BR/>"
-    #         f"UPS Voltage: <FONT COLOR='#FF0000'>{voltage:.3f}V</FONT><BR/>"
-    #         f"Battery: <FONT COLOR='#FF0000'>{capacity:.3f}&#37;</FONT><BR/>"
-    #         f"Charging: </FONT>{charge_status}</FONT><BR/>"
-    #         f"<FONT COLOR='#9C009C'>-=-=-=-=-=</FONT><FONT COLOR='#FF00FF'> RPi5 Stats </FONT><FONT COLOR='#9C009C'>=-=-=-=-=-</FONT><BR/>"
-    #         f"Input Voltage: <FONT COLOR='#FF0000'>{input_voltage:.3f}V</FONT><BR/>"
-    #         f"CPU Volts: <FONT COLOR='#FF0000'>{cpu_volts:.3f}V</FONT><BR/>"
-    #         f"CPU Amps: <FONT COLOR='#FF0000'>{cpu_amps:.3f}A</FONT><BR/>"
-    #         f"System Watts: <FONT COLOR='#FF0000'>{pwr_use:.3f}W</FONT><BR/>"
-    #         f"CPU Temp: <FONT COLOR='#FF0000'>{cpu_temp:.1f}&deg;C</FONT><BR/>"
-    #         f"Fan RPM: <FONT COLOR='#FF0000'>{fan_rpm}</FONT><BR/>"
-    #         f"<FONT COLOR='#9C009C'>-=-=-= <FONT COLOR='#FF00FF'>\U000026A1 Power Status \U000026A1 </FONT><FONT COLOR='#9C009C'>=-=-=-</FONT><BR/>"
-    #         f"{power_status}<BR/>"
-    #         f"{warn_status}"
-    #     )
-    #     self.label.setText(text)
 
     def update_status(self):
         voltage, capacity = read_voltage_and_capacity(bus)
@@ -204,6 +152,8 @@ class UPSStatusWindow(QWidget):
             warn_status = f"<FONT COLOR='#FF0000';FONT-SIZE: 14pt;>UPS Power levels approaching critical,<BR/>Batteries @{capacity:.2f}&#37;</FONT><BR/>"
         elif pld_state != 1 and capacity <= 24 and capacity >= 16:
             warn_status = f"<FONT COLOR='#FF0000';FONT-SIZE: 16pt;>UPS Power levels critical,<BR/>Batteries @{capacity:.2f}&#37;</FONT><BR/>"
+        elif pld_state != 1 and capacity <= 15 and not self.shutdown:
+            self.shutdown = True
         elif pld_state != 1 and capacity <= 15 and not self.shutdown:
             self.shutdown = True
             warn_status = "<FONT COLOR='#FF0000';FONT-SIZE: 18pt;>UPS Power failure imminent!<BR/>Auto shutdown to occur in 5 minutes!</FONT><BR/>"
