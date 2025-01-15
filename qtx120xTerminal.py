@@ -83,7 +83,7 @@ def power_consumption_watts():
     wattage = sum(amperages[key] * voltages[key] for key in amperages if key in voltages)
     return wattage
 
-def display_status(shutdown: Boolean):
+def display_status(shutdown):
     voltage, capacity = read_voltage_and_capacity(bus)
     cpu_volts = read_cpu_volts()
     cpu_amps = read_cpu_amps()
@@ -112,13 +112,13 @@ def display_status(shutdown: Boolean):
         warn_status = f"UPS Power levels approaching critical | Batteries @ {capacity:.2f}%"
     elif pld_state != 1 and capacity <= 24 and capacity >= 16:
         warn_status = f"UPS Power levels critical | Batteries @ {capacity:.2f}%"
-    elif pld_state != 1 and capacity <= 15 and not self.shutdown:
+    elif pld_state != 1 and capacity <= 15 and not shutdown:
         shutdown = True
         warn_status = "UPS Power failure imminent! Auto shutdown in 5 minutes!"
         call("sudo shutdown -P +5 'Power failure, shutdown in 5 minutes.'", shell=True)
-    elif pld_state != 1 and self.shutdown:
+    elif pld_state != 1 and shutdown:
         warn_status = "UPS Power failure imminent! Auto shutdown to occur within 5 minutes!"
-    elif pld_state == 1 and self.shutdown:
+    elif pld_state == 1 and shutdown:
         call("sudo shutdown -c 'Shutdown is cancelled'", shell=True)
         warn_status = "AC Power has been restored. Auto shutdown has been cancelled!"
         shutdown = False
