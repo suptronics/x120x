@@ -32,7 +32,6 @@ def read_voltage_and_capacity(bus):
     voltage = voltage_swapped * 1.25 / 1000 / 16 # convert to understandable voltage
     capacity_swapped = struct.unpack("<H", struct.pack(">H", capacity_read))[0] # big endian to little endian
     capacity = capacity_swapped / 256 # convert to 1-100% scale
-
     return voltage, capacity
 
 def get_pld_state():
@@ -116,12 +115,11 @@ class UPSStatusWindow(QWidget):
         layout.addWidget(self.label)
         self.setLayout(layout)
         # Populate initial data
-        self.update_status()
+        self.shutdown = False
         self.update_status()
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update_status)
         self.timer.start(30000)  ## milliseconds
-        self.shutdown = False
 
     def update_status(self):
         voltage, capacity = read_voltage_and_capacity(bus)
