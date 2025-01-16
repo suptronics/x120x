@@ -67,15 +67,15 @@ try:
             battery_status = get_battery_status(voltage)
             capacity = readCapacity(bus)
             print(f"Capacity: {capacity:.2f}% ({battery_status}), AC Power State: {'Plugged in' if ac_power_state == 1 else 'Unplugged'}, Voltage: {voltage:.2f}V")
-            if capacity < 20:
-                print("Battery level critical.")
-                failure_counter += 1
-            elif voltage < 3.20:
-                print("Battery voltage critical.")
-                failure_counter += 1
-            elif ac_power_state == 0:
+            if ac_power_state == 0:
                 print("UPS is unplugged or AC power loss detected.")
                 failure_counter += 1
+                if capacity < 20:
+                    print("Battery level critical.")
+                    failure_counter += 1
+                if voltage < 3.20:
+                    print("Battery voltage critical.")
+                    failure_counter += 1
             else:
                 failure_counter = 0
                 break
