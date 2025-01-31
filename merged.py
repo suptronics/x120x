@@ -2,7 +2,7 @@
 
 import os
 import struct
-import smbus
+import smbus2
 import time
 import logging
 import subprocess
@@ -51,7 +51,7 @@ else:
         f.write(pid)
 
 try:
-    bus = smbus.SMBus(1)
+    bus = smbus2.SMBus(1)
     address = 0x36
     PLD_PIN = 6
     chip = gpiod.Chip('gpiochip0') # since kernel release 6.6.45 you have to use 'gpiochip0' - before it was 'gpiochip4'
