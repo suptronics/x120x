@@ -2,7 +2,7 @@
 #This python script is only suitable for UPS Shield X1200, X1201 and X1202
 
 import struct
-import smbus
+import smbus2
 import time
 from subprocess import call
 
@@ -24,7 +24,7 @@ def readCapacity(bus):
      return capacity
 
 
-bus = smbus.SMBus(1)
+bus = smbus2.SMBus(1)
 
 while True:
 
