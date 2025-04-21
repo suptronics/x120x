@@ -104,6 +104,8 @@ def power_consumption_watts():
 class UPSStatusWindow(QWidget):
     def __init__(self):
         super().__init__()
+        self.shutdown = False
+
         self.setWindowTitle(" X120X UPS Status ")
         self.setStyleSheet("BACKGROUND-COLOR: #2C132C;")
         self.resize(450, 380)
@@ -115,13 +117,13 @@ class UPSStatusWindow(QWidget):
         layout = QVBoxLayout(self)
         layout.addWidget(self.label)
         self.setLayout(layout)
+
         # Populate initial data
         self.update_status()
         self.update_status()
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update_status)
         self.timer.start(30000)  ## milliseconds
-        self.shutdown = False
 
     def update_status(self):
         voltage, capacity = read_voltage_and_capacity(bus)
